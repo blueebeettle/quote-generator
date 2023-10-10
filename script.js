@@ -64,7 +64,7 @@ async function getQuote() {
         newQuote();
         complete();
     } catch (error) {
-        console.error(error);
+        alert('Cannot Load Data From Server, Please Try Again');
     }
 }
 
