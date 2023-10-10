@@ -23,23 +23,49 @@ function complete() {
 function newQuote() {
     loading();
     // Pick A Random Quote From apiQuotes Array
-    const quote = localQuotes[Math.floor(Math.random() * localQuotes.length)];
+    const quote = apiQuotes;
+
+
     // Check If Author Field Is Null or Not
-    if (!quote.author) {
+    if (!quote.originator.name) {
         authorText.textContent = "Unknown"
     } else {
-        authorText.textContent = quote.author;
+        authorText.textContent = quote.originator.name;
     }
 
     // Check Quote Length To Determine Styling
-    if (quote.text.length > 120) {
+    if (quote.content.length > 120) {
         quoteText.classList.add('long-quote');
     } else {
         quoteText.classList.remove('long-quote');
     }
     // Set Quote, Hide Loader
-    quoteText.textContent = quote.text;
-    complete();
+    quoteText.textContent = quote.content;
+
+}
+
+
+// Fetching Quotes From API
+async function getQuote() {
+    loading();
+    const url = 'https://quotes15.p.rapidapi.com/quotes/random/?language_code=en';
+    const options = {
+        method: 'GET',
+        headers: {
+            'X-RapidAPI-Key': '0aecfec414msh60a333ea081bfd0p1f575cjsn940b4d039241',
+            'X-RapidAPI-Host': 'quotes15.p.rapidapi.com'
+        }
+    };
+
+    try {
+        const response = await fetch(url, options);
+        apiQuotes = await response.json();
+        console.log(apiQuotes);
+        newQuote();
+        complete();
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 // Tweet A Quote
@@ -49,8 +75,8 @@ function tweetQuote() {
 }
 
 // EventListener
-newQuoteBtn.addEventListener('click', newQuote);
+newQuoteBtn.addEventListener('click', getQuote);
 twitterBtn.addEventListener('click', tweetQuote);
 
 // On Load
-newQuote();
+getQuote();
