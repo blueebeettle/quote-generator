@@ -22,26 +22,21 @@ function complete() {
 // Show New Quote
 function newQuote() {
     loading();
-    // Pick A Random Quote From apiQuotes Array
-    const quote = apiQuotes;
-
-
     // Check If Author Field Is Null or Not
-    if (!quote.originator.name) {
+    if (!apiQuotes.originator.name) {
         authorText.textContent = "Unknown"
     } else {
-        authorText.textContent = quote.originator.name;
+        authorText.textContent = apiQuotes.originator.name;
     }
 
     // Check Quote Length To Determine Styling
-    if (quote.content.length > 120) {
+    if (apiQuotes.content.length > 120) {
         quoteText.classList.add('long-quote');
     } else {
         quoteText.classList.remove('long-quote');
     }
     // Set Quote, Hide Loader
-    quoteText.textContent = quote.content;
-
+    quoteText.textContent = apiQuotes.content;
 }
 
 
@@ -60,13 +55,13 @@ async function getQuote() {
     try {
         const response = await fetch(url, options);
         apiQuotes = await response.json();
-        console.log(apiQuotes);
         newQuote();
         complete();
     } catch (error) {
-        alert('Cannot Load Data From Server, Please Try Again');
+        alert('Cannot Load Data From Server, Please Reload');
     }
 }
+
 
 // Tweet A Quote
 function tweetQuote() {
